@@ -1,13 +1,19 @@
 <p align="center">
+  
   ![OIP](https://github.com/user-attachments/assets/99e60590-7bda-4f84-a207-2df143cac8f1)
+  
 </p>
 <h3 align="center">RAG Chatbot</h3>
 
 <div align="center">
   [![Status](https://img.shields.io/badge/status-active-success.svg)]() 
+  
   [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
+  
   [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
+  
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+  
 </div>
 
 <p align="center">Developed an end-to-end RAG chatbot with a FastAPI backend. The system uses MySQL to store data, Pinecone for vector search, and Redis to manage chat history and sessions. It also uses Groq for fast LLM responses, providing quick and context-aware answers.
@@ -136,6 +142,7 @@ Get-Service -Name MySQL*
 ## Installing
 
 First install UV(uv is lightweight, cross-platform, and built to manage Python projects and dependencies consistently.)
+
 
 
 
