@@ -112,43 +112,30 @@ With these improvements, the chatbot could evolve into a **fully general-purpose
 
 These instructions will help you set up a copy of the project locally for development and testing purposes. See **Deployment** for notes on running the project in a live environment.
 
----
+```bash
+# Check UV version
+uv --version
 
-### Prerequisites
-
-You need the following installed on your machine:  
-- **Python 3.8+**  
-- **Redis**  
-- **MySQL**  
-
-You will also need **API keys** for Groq and Pinecone.
-
-# -------------------------------
-# Check Python version
-# Linux / Mac
-python3 --version
-# Windows
-python --version
-
-# -------------------------------
-# Verify Redis is running
-# Linux / Mac
+# Verify Redis is running (Linux / Mac)
 redis-cli ping
 # Output should be: PONG
 
-# Windows (PowerShell)
+# Verify Redis is running ( Windows (using PowerShell))
 redis-cli.exe ping
 # Output should be: PONG
 
-# -------------------------------
-# Verify MySQL is running
-# Linux
+# Verify MySQL is running (Linux)
 systemctl status mysql
 
-# Mac (Homebrew)
+# Verify MySQL is running  ( Mac (Homebrew) )
 brew services list
 
-# Windows (PowerShell)
+# Verify MySQL is running (Windows (PowerShell))
 Get-Service -Name MySQL* 
+```
+## Installing
+
+First install UV(uv is lightweight, cross-platform, and built to manage Python projects and dependencies consistently.)
+
 
 
