@@ -149,4 +149,7 @@ def chatbot_response(user_id: str, query: str, top_k: int = 3):
         return final_answer
     
     except Exception as e:
-        return f"Error: {str(e)}"
+        return {
+        "error": "Service temporarily unavailable. Please try again later.",
+        "status": "failed"
+    }
