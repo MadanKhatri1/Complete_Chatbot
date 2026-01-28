@@ -1,19 +1,17 @@
 <p align="center">
-  
-  ![OIP](https://github.com/user-attachments/assets/99e60590-7bda-4f84-a207-2df143cac8f1)
-  
+  <a href="" rel="noopener">
+ <img src="[https://i.imgur.com/AZ2iWek.png](https://corp.yonyx.com/wp-content/uploads/ChatGPT-Image-Apr-29-2025-11_57_48-AM.png)" alt="Project logo"></a>
 </p>
 <h3 align="center">RAG Chatbot</h3>
 
 <div align="center">
+
+  [![Hackathon](https://img.shields.io/badge/hackathon-name-orange.svg)](http://hackathon.url.com) 
   [![Status](https://img.shields.io/badge/status-active-success.svg)]() 
-  
   [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-  
   [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-  
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
-  
+
 </div>
 
 <p align="center">Developed an end-to-end RAG chatbot with a FastAPI backend. The system uses MySQL to store data, Pinecone for vector search, and Redis to manage chat history and sessions. It also uses Groq for fast LLM responses, providing quick and context-aware answers.
@@ -141,8 +139,138 @@ Get-Service -Name MySQL*
 ```
 ## Installing
 
-First install UV(uv is lightweight, cross-platform, and built to manage Python projects and dependencies consistently.)
+First, install UV ( it is lightweight, cross-platform, and built to manage Python projects and dependencies consistently)
 
+```
+yay -S uv #For Arch Linux
+
+For Ubuntu/Debian:
+curl -LsSf https://astral.sh/uv/install.sh | sh
+echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+curl -LsSf https://astral.sh/uv/install.sh | sh # For macOS
+
+For Windows:
+# Using PowerShell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# OR using pip
+pip install uv
+```
+
+MySQL/MariaDB Installation
+
+```
+# For Arch Linux:
+Install MariaDB (MySQL-compatible):
+# Install MariaDB
+sudo pacman -S mariadb
+
+# Initialize database
+sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+# Start and enable service
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+
+# Secure installation (set root password)
+sudo mysql_secure_installation
+
+Create Database and User:
+# Login to MySQL
+sudo mariadb -u root
+
+# Run these SQL commands:
+CREATE DATABASE mydatabase;
+CREATE USER 'chatbot_user'@'localhost' IDENTIFIED BY 'your_password_here';
+GRANT ALL PRIVILEGES ON chatbot_db.* TO 'chatbot_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+For macOS (Homebrew):
+# Install MySQL
+brew install mysql
+
+# Start MySQL service
+brew services start mysql
+
+# Secure installation (first time only)
+mysql_secure_installation
+
+# Create database and user
+mysql -u root -p
+# Then run the SQL commands above
+
+For Windows:
+1. Download MySQL Installer from mysql.com
+2. Run installer, select "MySQL Server"
+3. Follow setup wizard, remember root password
+4. Use MySQL Workbench or command line to create database
+```
+Redis Installation & Setup
+```
+Installation for Arch Linux:
+# 1. Install Redis
+sudo pacman -S redis
+
+# 2. Start Redis service
+sudo systemctl start redis
+
+# 3. Enable auto-start on boot
+sudo systemctl enable redis
+
+# 4. Verify Redis is running
+sudo systemctl status redis
+
+# 5. Test connection
+redis-cli ping  # Should return "PONG"
+
+Installation for Ubuntu/Debian:
+# 1. Install Redis
+sudo apt update
+sudo apt install redis-server
+
+# 2. Start and enable
+sudo systemctl start redis
+sudo systemctl enable redis
+
+# 3. Check status
+sudo systemctl status redis
+
+# 4. Test
+redis-cli ping
+
+Installation for macOS (Homebrew):
+# 1. Install Redis
+brew install redis
+
+# 2. Start Redis service
+brew services start redis
+
+# 3. Test connection
+redis-cli ping
+
+Installation for Windows:
+
+1. Go to Microsoft Redis releases (https://github.com/microsoftarchive/redis/releases)
+2. Download the latest .msi installer (Redis-x64-3.0.504.msi or newer)
+3. Run the installer and follow the wizard
+4. Choose "Add Redis installation folder to PATH"
+5. Complete installation
+
+Start Redis:
+# Open Command Prompt or PowerShell
+# Redis starts automatically as a Windows service
+# Check if Redis is running
+redis-server --version
+
+# Start Redis CLI
+redis-cli
+
+# Test connection
+ping
+```
 
 
 
