@@ -1,6 +1,8 @@
 from fastapi import FastAPI, UploadFile
 from app.services.upload import upload_document
 import uuid
+import os
+from pathlib import Path
 from app.database.pinecone_sql_store import store_embeddings_in_pinecone_sql # type: ignore
 from app.services.chat import chatbot_response
 from starlette.concurrency import run_in_threadpool
@@ -13,8 +15,6 @@ def read_root():
     return {"Hello": "World"}
 
 
-import os
-from pathlib import Path
 
 UPLOAD_DIR = "data"
 
