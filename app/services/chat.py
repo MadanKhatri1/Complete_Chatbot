@@ -74,7 +74,7 @@ def search_text_from_pinecone(query: str, top_k: int = 5):
     return combined_text
 
 
-def chatbot_response(user_id: str, query: str, top_k: int = 5):
+def chatbot_response(user_id: str, query: str, top_k: int = 3):
     """
     Generate chatbot response using recent chat history, Pinecone search results,
     and Groq chat model. Supports interview booking.
@@ -107,8 +107,11 @@ def chatbot_response(user_id: str, query: str, top_k: int = 5):
         return response
 
     # Otherwise, continue with normal chatbot flow
-    recent_messages = get_recent_messages(user_id, limit=5)
+    recent_messages = get_recent_messages(user_id, limit=3)
     context = "\n".join(recent_messages)
+
+    if len(context) > 1000:  
+        context = context[-1000:]
 
     search_results = search_text_from_pinecone(query, top_k=top_k)
 
