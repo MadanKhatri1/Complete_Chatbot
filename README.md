@@ -187,8 +187,10 @@ CREATE USER 'chatbot_user'@'localhost' IDENTIFIED BY 'your_password_here';
 GRANT ALL PRIVILEGES ON chatbot_db.* TO 'chatbot_user'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
+```
 
 For macOS (Homebrew):
+```
 # Install MySQL
 brew install mysql
 
@@ -201,16 +203,20 @@ mysql_secure_installation
 # Create database and user
 mysql -u root -p
 # Then run the SQL commands above
+```
 
 For Windows:
+```
 1. Download MySQL Installer from mysql.com
 2. Run installer, select "MySQL Server"
 3. Follow setup wizard, remember root password
 4. Use MySQL Workbench or command line to create database
 ```
+
 Redis Installation & Setup
+
+Installation for Arch Linux
 ```
-Installation for Arch Linux:
 # 1. Install Redis
 sudo pacman -S redis
 
@@ -225,8 +231,10 @@ sudo systemctl status redis
 
 # 5. Test connection
 redis-cli ping  # Should return "PONG"
+```
 
 Installation for Ubuntu/Debian:
+```
 # 1. Install Redis
 sudo apt update
 sudo apt install redis-server
@@ -240,8 +248,10 @@ sudo systemctl status redis
 
 # 4. Test
 redis-cli ping
+```
 
 Installation for macOS (Homebrew):
+```
 # 1. Install Redis
 brew install redis
 
@@ -250,9 +260,10 @@ brew services start redis
 
 # 3. Test connection
 redis-cli ping
+```
 
 Installation for Windows:
-
+```
 1. Go to Microsoft Redis releases (https://github.com/microsoftarchive/redis/releases)
 2. Download the latest .msi installer (Redis-x64-3.0.504.msi or newer)
 3. Run the installer and follow the wizard
@@ -271,6 +282,7 @@ redis-cli
 # Test connection
 ping
 ```
+
 
 
 
