@@ -17,38 +17,33 @@ from pathlib import Path
 
 UPLOAD_DIR = "data"
 
+from fastapi import BackgroundTasks
+from starlette.concurrency import run_in_threadpool
+
 @app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile):
-    # Create upload directory if it doesn't exist
+async def create_upload_file(file: UploadFile, background_tasks: BackgroundTasks):
+    # Save file asynchronously (I/O bound - fine)
     os.makedirs(UPLOAD_DIR, exist_ok=True)
-    
-    filename = file.filename
-    file_extension = filename.split('.')[-1].lower()
-    
-    # Create a unique filename to avoid conflicts
-    unique_filename = f"{uuid.uuid4()}_{filename}"
+    unique_filename = f"{uuid.uuid4()}_{file.filename}"
     file_path = os.path.join(UPLOAD_DIR, unique_filename)
     
-    # Save the file
+    content = await file.read()  
     with open(file_path, "wb") as buffer:
-        content = await file.read()
         buffer.write(content)
     
-    print(f"File saved at: {file_path}")
+    # CPU-heavy work goes to thread pool 
+    await run_in_threadpool(process_and_store, file_path, file.filename)
     
-    # Get absolute path
-    absolute_path = os.path.abspath(file_path)
-    print(f"Absolute path: {absolute_path}")
+    return {
+        "status": "processing", 
+        "filename": file.filename,
+        "message": "File uploaded and processing in background"
+    }
 
-    # Call the upload_document function
-    chunks, embeddings =upload_document(file_path, "semantic")
-
-    # Store embeddings in Pinecone and SQL
-    chunk_count=store_embeddings_in_pinecone_sql(chunks, embeddings, filename, "fixed_size")
-
-    print(f"Processed {chunk_count} chunks from the document.")
-
-    return {"filename": filename, "saved_as": unique_filename, "file_path": file_path, "absolute_path": absolute_path}
+def process_and_store(file_path: str, filename: str):
+    """This runs in a separate thread, blocking only that thread"""
+    chunks, embeddings = upload_document(file_path, "semantic")
+    store_embeddings_in_pinecone_sql(chunks, embeddings, filename, "semantic")
 
 @app.post("/chat/")
 def chat_with_document(query: str,user_id: str="Demo"):
