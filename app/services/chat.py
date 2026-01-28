@@ -95,11 +95,11 @@ def extract_booking_with_llm(query: str):
     return None
 
 def chatbot_response(user_id: str, query: str, top_k: int = 3):
-    try:
-        """
+    """
         Generate chatbot response using recent chat history, Pinecone search results,
         and Groq chat model. Supports interview booking.
-        """
+    """
+    try:
 
         # Store user query in Redis
         add_message(user_id, f"User: {query}")
