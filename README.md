@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img src="[https://i.imgur.com/AZ2iWek.png](https://corp.yonyx.com/wp-content/uploads/ChatGPT-Image-Apr-29-2025-11_57_48-AM.png)" alt="Project logo"></a>
+ <img src="https://corp.yonyx.com/wp-content/uploads/ChatGPT-Image-Apr-29-2025-11_57_48-AM.png" alt="Project logo"></a>
 </p>
 <h3 align="center">RAG Chatbot</h3>
 
@@ -112,11 +112,10 @@ While the current version of the RAG chatbot provides fast, context-aware respon
 
 With these improvements, the chatbot could evolve into a **fully general-purpose enterprise assistant**, capable of handling large-scale knowledge bases, natural conversation, and intelligent task automation across multiple domains.
 
-## 🏁 Getting Started
+## 🏁 Getting Started  <a name="getting_started"></a>
 
 These instructions will help you set up a copy of the project locally for development and testing purposes. See **Deployment** for notes on running the project in a live environment.
-
-```bash
+```
 # Check UV version
 uv --version
 
@@ -283,6 +282,40 @@ redis-cli
 ping
 ```
 
+Run the code
+```
+git clone https://github.com/MadanKhatri1/Complete_Chatbot
+cd Complete_Chatbot
+uv pip install -r requirements.txt
 
+# Create a .env file with API Keys with the following content
+PINECONE_API_KEY="APIKEY"
+GROQ_API_KEY="APIKEY"
+
+fastapi dev main.py
+```
+
+## 🎈 Usage <a name="usage"></a>
+
+Once the server is running, go to http://localhost:8000/docs this url. There you will see two endpoints one for uploadfile and another for chat. You first need to go to uploadfile endpoint click 'Try it out' button and upload a file (pdf or txt) and click 'Execute'. Once the upload is finished you can go to chat endpoint and again clik on 'Try it out' button then in the query input box type your question and click 'Execute' then you will see the response of the chatbot.
+
+## ⛏️ Built With <a name = "tech_stack"></a>
+
+- [FatAPI](https://fastapi.tiangolo.com/) - Backend
+- [Groq](https://console.groq.com/home) - Chat Responses
+- [Pinecone](https://www.pinecone.io/) - Store and retrieve embeddings
+- [HuggingFace Sentence Transformers](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) - Generate embeddings
+- [MySQL (via PyMySQL)](https://www.mysql.com/) - Storage for data metadata
+- [Redis](https://redis.io/docs/latest/) - Short-term chat history and session management
+- [PyPDF](https://pypi.org/project/pypdf/) - Extracts text from PDF files
+- [UV (package manager)](https://docs.astral.sh/uv/) - Fast Python package installer and resolver
+
+## ✍️ Authors <a name = "authors"></a>
+- [@MadanKhatri1](https://github.com/MadanKhatri1) 
+
+## 🎉 Acknowledgments <a name = "acknowledgments"></a>
+- [Sentence Transformers](https://www.sbert.net/) for embedding models
+- [Groq](https://groq.com/) & [Pinecone](https://www.pinecone.io/) for AI infrastructure
+- The open-source community for continuous inspiration
 
 
