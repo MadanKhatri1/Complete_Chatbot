@@ -45,11 +45,15 @@ def process_and_store(file_path: str, filename: str):
     store_embeddings_in_pinecone_sql(chunks, embeddings, filename, "semantic")
 
 @app.post("/chat/")
-def chat_with_document(query: str,user_id: str="Demo"):
+def chat_with_document(query: str,user_id:str=None):
     """
     Chat with the uploaded document
     """
-    
-    results = chatbot_response(user_id, query, top_k=5)
-    
-    return {"query": query, "results": results}
+    if not user_id:
+        user_id = str(uuid.uuid4())  
+    results = chatbot_response(user_id, query, top_k=3)
+    return {
+        "user_id": user_id, 
+        "query": query, 
+        "results": results
+    }
