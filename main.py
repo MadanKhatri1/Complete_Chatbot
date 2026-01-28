@@ -3,6 +3,7 @@ from app.services.upload import upload_document
 import uuid
 from app.database.pinecone_sql_store import store_embeddings_in_pinecone_sql # type: ignore
 from app.services.chat import chatbot_response
+from starlette.concurrency import run_in_threadpool
 
 app = FastAPI()
 
@@ -17,8 +18,6 @@ from pathlib import Path
 
 UPLOAD_DIR = "data"
 
-from fastapi import BackgroundTasks
-from starlette.concurrency import run_in_threadpool
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile):
