@@ -230,6 +230,11 @@ sudo systemctl status redis
 
 # 5. Test connection
 redis-cli ping  # Should return "PONG"
+
+# to ensure chat history survives restarts.  
+redis-cli CONFIG SET appendonly yes
+redis-cli CONFIG REWRITE
+
 ```
 
 Installation for Ubuntu/Debian:
