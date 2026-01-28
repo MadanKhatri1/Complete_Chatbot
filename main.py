@@ -21,7 +21,7 @@ from fastapi import BackgroundTasks
 from starlette.concurrency import run_in_threadpool
 
 @app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile, background_tasks: BackgroundTasks):
+async def create_upload_file(file: UploadFile):
     # Save file asynchronously (I/O bound - fine)
     os.makedirs(UPLOAD_DIR, exist_ok=True)
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
