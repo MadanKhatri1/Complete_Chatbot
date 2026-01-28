@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from pinecone import Pinecone
 from sentence_transformers import SentenceTransformer
 from typing import List
+import json
 from app.redis.chat_memory import add_message, get_recent_messages
 from groq import Groq  # Groq client
 import re 
@@ -73,74 +74,79 @@ def search_text_from_pinecone(query: str, top_k: int = 5):
 
     return combined_text
 
-
-def chatbot_response(user_id: str, query: str, top_k: int = 3):
-    """
-    Generate chatbot response using recent chat history, Pinecone search results,
-    and Groq chat model. Supports interview booking.
-    """
-
-    # Store user query in Redis
-    add_message(user_id, f"User: {query}")
-
-    # Check if query looks like a booking request
-    booking_pattern = re.search(
-        r"name[:\- ]?(?P<name>[A-Za-z ]+).*"
-        r"email[:\- ]?(?P<email>[\w\.-]+@[\w\.-]+).*"
-        r"date[:\- ]?(?P<date>\d{4}-\d{2}-\d{2}).*"
-        r"time[:\- ]?(?P<time>\d{2}:\d{2})",
-        query,
-        re.IGNORECASE | re.DOTALL
-    )
-
-    if booking_pattern:
-        booking = booking_pattern.groupdict()
-        save_booking(user_id, booking)
-
-        response = (
-            f"Interview booked for {booking['name']} "
-            f"on {booking['date']} at {booking['time']}. "
-            f"Confirmation sent to {booking['email']}."
-        )
-
-        add_message(user_id, f"Bot: {response}")
-        return response
-
-    # Otherwise, continue with normal chatbot flow
-    recent_messages = get_recent_messages(user_id, limit=3)
-    context = "\n".join(recent_messages)
-
-    if len(context) > 1000:  
-        context = context[-1000:]
-
-    search_results = search_text_from_pinecone(query, top_k=top_k)
-
-    system_prompt = f"""
-    You are a helpful assistant.
-
-    Rules:
-    - Use BOTH the previous chat context and the Pinecone search results.
-    - If the answer is not in the context or search results, say "I don't know".
-    - Be concise and accurate.
-    - Cite sources using filenames when possible.
-
-    Previous Chat Context:
-    {context}
-
-    Search Results:
-    {search_results}
-    """
-
+def extract_booking_with_llm(query: str):
+    prompt = f"""Extract name, email, date, time from this booking request.
+    Return ONLY JSON: {{"name": "...", "email": "...", "date": "YYYY-MM-DD", "time": "HH:MM"}}
+    If missing, use null.
+    Request: {query}"""
+    
     response = groq_client.chat.completions.create(
         model="openai/gpt-oss-120b",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": query}
-        ],
-        temperature=0.2
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0
     )
+    
+    try:
+        result = json.loads(response.choices[0].message.content)
+        if result.get("email") and result.get("date"):
+            return result
+    except:
+        pass
+    return None
 
-    final_answer = response.choices[0].message.content
-    add_message(user_id, f"Bot: {final_answer}")
+def chatbot_response(user_id: str, query: str, top_k: int = 3):
+    try:
+        """
+        Generate chatbot response using recent chat history, Pinecone search results,
+        and Groq chat model. Supports interview booking.
+        """
 
-    return final_answer
+        # Store user query in Redis
+        add_message(user_id, f"User: {query}")
+
+        booking = extract_booking_with_llm(query)
+        if booking:
+            save_booking(user_id, booking)
+            return f"Booked for {booking['name']} on {booking['date']} at {booking['time']}"
+
+        
+        recent_messages = get_recent_messages(user_id, limit=3)
+        context = "\n".join(recent_messages)
+
+        if len(context) > 1000:  
+            context = context[-1000:]
+
+        search_results = search_text_from_pinecone(query, top_k=top_k)
+
+        system_prompt = f"""
+        You are a helpful assistant.
+
+        Rules:
+        - Use BOTH the previous chat context and the Pinecone search results.
+        - If the answer is not in the context or search results, say "I don't know".
+        - Be concise and accurate.
+        - Cite sources using filenames when possible.
+
+        Previous Chat Context:
+        {context}
+
+        Search Results:
+        {search_results}
+        """
+
+        response = groq_client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": query}
+            ],
+            temperature=0.2
+        )
+
+        final_answer = response.choices[0].message.content
+        add_message(user_id, f"Bot: {final_answer}")
+
+        return final_answer
+    
+    except Exception as e:
+        return f"Error: {str(e)}"
