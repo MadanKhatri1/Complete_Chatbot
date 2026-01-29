@@ -21,7 +21,7 @@ UPLOAD_DIR = "data"
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile):
-    # Save file asynchronously (I/O bound - fine)
+    # Save file asynchronously (I/O bound )
     os.makedirs(UPLOAD_DIR, exist_ok=True)
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
     file_path = os.path.join(UPLOAD_DIR, unique_filename)
