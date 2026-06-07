@@ -291,6 +291,8 @@ Run the code
 ```
 git clone https://github.com/MadanKhatri1/Complete_Chatbot
 cd Complete_Chatbot
+uv venv
+source .venv/bin/activate
 uv pip install -r requirements.txt
 
 # Create a .env file with API Keys with the following content
