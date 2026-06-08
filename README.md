@@ -1,7 +1,16 @@
+## Demo
+<p align="center">
+  <a href="https://github.com/user-attachments/assets/3ccfdc4e-8807-484a-bb42-6080a8b5d38f" rel="noopener">
+    Demo Link
+  </a>
+</p>
+<br/>
+
 <p align="center">
   <a href="" rel="noopener">
  <img src="https://corp.yonyx.com/wp-content/uploads/ChatGPT-Image-Apr-29-2025-11_57_48-AM.png" alt="Project logo"></a>
 </p>
+    
 <h3 align="center">RAG Chatbot</h3>
 
 <div align="center">
@@ -291,6 +300,8 @@ Run the code
 ```
 git clone https://github.com/MadanKhatri1/Complete_Chatbot
 cd Complete_Chatbot
+uv venv
+source .venv/bin/activate
 uv pip install -r requirements.txt
 
 # Create a .env file with API Keys with the following content
