@@ -32,15 +32,36 @@ def encode_texts(texts: List[str]) -> List[List[float]]:
     
 
 def document_processing(file_path:str="..data/sample.pdf"):
-    
-    if file_path.endswith('.pdf'):
-        reader = PdfReader(file_path)
-        page_texts = [page.extract_text() for page in reader.pages]
-        text = "\n".join(page_texts) 
+    text = ""
 
-    if file_path.endswith('.txt'):
+    if file_path.endswith('.pdf'):
+        try:
+            reader = PdfReader(file_path)
+            page_texts: List[str] = []
+            for page in reader.pages:
+                page_texts.append(page.extract_text() or "")
+            text = "\n".join(page_texts)
+        except LookupError as e:
+           
+            try:
+                import pdfplumber  # type: ignore
+            except Exception:
+                raise RuntimeError(
+                    "PDF text extraction failed due to unknown encoding (e.g. '/SymbolSetEncoding'). "
+                    "Install 'pdfplumber' (pip install pdfplumber) to enable a fallback extraction, "
+                    "or pin/upgrade 'pypdf' to a version that handles the encoding."
+                ) from e
+
+            with pdfplumber.open(file_path) as pdf:
+                pages = [p.extract_text() or "" for p in pdf.pages]
+            text = "\n".join(pages)
+
+    elif file_path.endswith('.txt'):
         with open(file_path, 'r') as file:
             text = file.read()
+
+    else:
+        raise ValueError(f"Unsupported file type: {file_path}")
 
     return text
 

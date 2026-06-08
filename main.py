@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile
-from app.services.upload import upload_document
+from app.services.upload import upload_document, get_embedding_model
 import uuid
 import os
 from pathlib import Path
@@ -8,6 +8,14 @@ from app.services.chat import chatbot_response
 from starlette.concurrency import run_in_threadpool
 
 app = FastAPI()
+
+
+@app.on_event("startup")
+async def preload_embedding_model():
+    try:
+        await run_in_threadpool(get_embedding_model)
+    except Exception as e:
+        print("Warning: failed to preload embedding model on startup:", e)
 
 
 @app.get("/")
